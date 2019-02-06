@@ -8,10 +8,10 @@ document.addEventListener('DOMContentLoaded', ()=> {
     // gestion de mute
     const mute = document.querySelector('#mute');
     const lab = document.querySelector('.lab');
-  
-    document.querySelector('.button').addEventListener('click', function() {
+    const on_off =  document.querySelector('#rond');
+
+    document.querySelector('.button').addEventListener('click',()=> {
       const context = new AudioContext();
-      const delay = context.createDelay(5.0);
       
       //direction de l'audio du navigateur
       navigator.mediaDevices.getUserMedia({audio:true})
@@ -19,6 +19,19 @@ document.addEventListener('DOMContentLoaded', ()=> {
           const guitare = context.createMediaStreamSource(stream);
           const speaker = context.destination;
           guitare.connect(speaker);
+          
+        // effet de delayjs
+          on_off.addEventListener('click',()=> {
+            let delay = context.createDelay(0.5);
+            let gain = context.createGain(0.8);
+            delay.connect(gain);
+            gain.connect(delay);
+
+            guitare.connect(delay);
+            guitare.connect(gain);
+
+            guitare.connect(speaker);
+          });
         });
     });
 
@@ -29,15 +42,7 @@ mute.addEventListener('click', ()=> {
   });
 });
 
-  // effet de delayjs
-  const on_off =  document.querySelector('#rond');
-    // Fonction  
-      on_off.addEventListener('click',function active() {
-        guitare.connect(delay);
-        let gain = context.createGain();
-        delay.connect(gain);
-        gain.connect(speaker);
-      });
+  
   //});
 
 
