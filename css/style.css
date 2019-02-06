@@ -147,7 +147,7 @@ h1{
     left: calc(50% - 150px);
     top: calc(50% - 250px);
     /* border: rgba(255, 252, 0, 0.51); */
-    border: solid skyblue;
+    border: solid var(--blue_web);
     border-radius: 15px;
     border-width: 4px;
 

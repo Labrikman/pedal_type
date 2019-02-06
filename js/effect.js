@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', ()=> {
     const mute = document.querySelector('#mute');
     const lab = document.querySelector('.lab');
     const on_off =  document.querySelector('#rond');
+    const potard = document.querySelector('.potard');
 
     document.querySelector('.button').addEventListener('click',()=> {
       const context = new AudioContext();
@@ -19,33 +20,45 @@ document.addEventListener('DOMContentLoaded', ()=> {
           const guitare = context.createMediaStreamSource(stream);
           const speaker = context.destination;
           guitare.connect(speaker);
-          
-        // effet de delayjs
+          var allume = 0;
+        // effet de delay.js
           on_off.addEventListener('click',()=> {
-            let delay = context.createDelay(0.5);
-            let gain = context.createGain(0.8);
-            delay.connect(gain);
-            gain.connect(delay);
 
-            guitare.connect(delay);
-            guitare.connect(gain);
-
-            guitare.connect(speaker);
+            if(allume == 0){  
+               potard.addEventListener('mousemove', (e)=> {
+                // Gestion du clic enfoncé
+                  if (e.buttons != 0) {
+                    let nombre = document.querySelector('.nombre').textContent;
+                    delay_cmd = nombre/100;
+                    console.log(delay_cmd);
+                    const delay = context.createDelay();
+                    delay.delayTime.value = delay_cmd/2;
+                  }
+                });
+                
+                  const gain = context.createGain(0.8);
+                  delay.connect(gain);
+                  gain.connect(delay);
+                  guitare.connect(delay);
+                  guitare.connect(gain);
+                  guitare.connect(speaker);
+                
+            } else {
+              allume = 0;
+              console.log(allume);
+            }
           });
         });
     });
 
-// One-liner to resume playback when user interacted with the page.
-mute.addEventListener('click', ()=> {
-  context.resume().then(() => {
-    console.log('Playback resumed successfully');
+  // One-liner to resume playback when user interacted with the page.
+  mute.addEventListener('click', ()=> {
+    context.resume().then(() => {
+      console.log('Playback resumed successfully');
+    });
   });
-});
 
-  
   //});
-
-
 
   // mute.addEventListener('click', ()=> {
   //   voiceMute()
