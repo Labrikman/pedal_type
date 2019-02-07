@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
   var angleDegre, angleRadiant;
   var css_potard;
   var css_pedal;
+
   // Ciblages
   var potard = document.querySelector('.potard');
   var rond = document.querySelector('.rond');
@@ -69,7 +70,7 @@ var on_off = document.getElementById("rond");
   // Ciblage des éléments
       var ampoule = document.querySelector(".ampoule");
       var bouton = document.querySelector(".bouton");
-      var fond = document.querySelector("body");
+     // var fond = document.querySelector("body");
   // Switch de classe
       ampoule.classList.toggle('active');
       bouton.classList.toggle('on');
