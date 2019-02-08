@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', ()=> {
   //Ciblage 
     // gestion de mute
     const mute = document.querySelector('#mute');
-    //const lab = document.querySelector('.lab');
+    const lab = document.querySelector('.lab');
     const on_off =  document.querySelector('#rond');
     const potard = document.querySelector('.potard');
     const red = document.querySelector('.button');
@@ -23,50 +23,62 @@ document.addEventListener('DOMContentLoaded', ()=> {
           let guitare = context.createMediaStreamSource(stream);
           let speaker = context.destination;
           let delay = context.createDelay(5.0);
-          let gain = context.createGain(2); 
+          let distorsion = context.createWaveShaper();
+          let biquadFilter = audioCtx.createBiquadFilter();
+          let convolver = audioCtx.createConvolver();
+          let gainNode = context.createGain(2); 
           guitare.connect(speaker);
           
-          //gain.connect(delay);
-          //delay.connect(gain);
+          //gainNode.connect(delay);
+          //delay.connect(gainNode);
           
+            potard.addEventListener('mousemove', (e)=> {
+              // Gestion du clic enfoncé
+                if (e.buttons != 0) {
+                  let nombre = document.querySelector('.nombre').textContent;
+                  let delay_cmd = nombre/100/2;
+                  console.log(delay_cmd); 
+                  delay.delayTime.setValueAtTime(delay_cmd, context.currentTime);     
+                }
+              });
 
-          potard.addEventListener('mousemove', (e)=> {
-            // Gestion du clic enfoncé
-              if (e.buttons != 0) {
-                let nombre = document.querySelector('.nombre').textContent;
-                let delay_cmd = nombre/100/2;
-                console.log(delay_cmd); 
-                delay.delayTime.setValueAtTime(delay_cmd, context.currentTime);     
-              }
-            });
-            
-          let effet=0;
+          // Faire le changement d'effet ICI
+          let boucle=0;
           // effet de delay.js
           on_off.addEventListener('click',()=> {
                      
-            if(effet == 0){ 
-                guitare.connect(gain);
-                guitare.connect(delay);                          
-                delay.connect(speaker);
-                effet = 1;
+            if(boucle == 0){ 
+              let effet = document.querySelector('#effets').value;
+              switch(effet){
+                case 'distorsion':
+                  guitare.connect(distorsion);
+                  distorsion.connect(speaker);                       
+                
+                case 'overdrive':
+                  guitare.connect(gainNode);
+                  gainNode.connect(speaker);
+                
+                case 'delay':
+                  guitare.connect(delay);
+                  delay.connect(speaker);
+              }
+
+                boucle = 1;
                 console.log(effet);
             } else {
+                guitare.disconnect(distorsion);
+                distorsion.disconnect(speaker);
                 guitare.disconnect(delay);
                 delay.disconnect(speaker);
-                effet = 0;
+                guitare.disconnect(delay);
+                delay.disconnect(speaker);
+                boucle = 0;
                 console.log(effet);
             }
           });
 
         });
     });
-
-  // One-liner to resume playback when user interacted with the page.
-  mute.addEventListener('click', ()=> {
-    context.resume().then(() => {
-      console.log('Playback resumed successfully');
-    });
-  });
 
   //});
 
@@ -76,13 +88,26 @@ document.addEventListener('DOMContentLoaded', ()=> {
 
   // function voiceMute() {
   //   if(mute.checked) {
-  //     gainNode.gain.setTargetAtTime(0, audioCtx.currentTime, 0)
+  //     gainNodeNode.gainNode.setTargetAtTime(0, audioCtx.currentTime, 0)
   //     lab.innerHTML = "Unmute";
   //   } else {
-  //     gainNode.gain.setTargetAtTime(1, audioCtx.currentTime, 0)
+  //     gainNodeNode.gainNode.setTargetAtTime(1, audioCtx.currentTime, 0)
   //     lab.innerHTML = "Mute";
   //   }
   // }
 
+  mute.onclick = voiceMute;
+
+  function voiceMute() {
+    if(mute.id === "") {
+      gainNode.gain.setTargetAtTime(0, context.currentTime, 0)
+      mute.id = "activated";
+      lab.innerHTML = "Unmute";
+    } else {
+      gainNode.gain.setTargetAtTime(1, context.currentTime, 0)
+      mute.id = "";
+      lab.innerHTML = "Mute";
+    }
+  }
 });
 
