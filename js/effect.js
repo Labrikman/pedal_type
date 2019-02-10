@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', ()=> {
 
   ///////////////////////////////////////////////////  
-  /////////////////  effet sonore ///////////////////
+  ///////////////// effet sonore ////////////////////
   ///////////////////////////////////////////////////
 
   // initialization
@@ -108,16 +108,21 @@ document.addEventListener('DOMContentLoaded', ()=> {
           });
         }
 
+        /////////////////// Effet Bitcruch ////////////////////
+
+
+
         //////////////////// Enclanchement des effets //////////////////////
 
         let boucle=0;
+        let off_effet;
 
         on_off.addEventListener('click',()=> {
                      
           if(boucle == 0){ 
             let effet = document.querySelector('#effets').value;
             switch(effet){
-              case 'distorsion':
+              case 'distortion':
                 disto();
                 guitare.connect(distortion);
                 distortion.connect(biquadFilter);
@@ -142,33 +147,28 @@ document.addEventListener('DOMContentLoaded', ()=> {
                   break;
             }
             boucle = 1;
-            console.log(effet);
+            off_effet = effet;
+            console.log(off_effet+' connecté');
           } else {
-            let effet = document.querySelector('#effets').value;
-            switch(effet){
-              case 'distorsion':
-                distortion.disconnect(gainNode);
-                gainNode.disconnect(speaker);
+            if(off_effet == 'distortion'){
                 guitare.disconnect(distortion);
-                distortion.disconnect(speaker);
-                break;
-              case 'overdrive':
+                distortion.disconnect(biquadFilter);
+                biquadFilter.disconnect(gainNode);
+                gainNode.disconnect(speaker);
+            } else if (off_effet == 'overdrive'){
                 guitare.disconnect(gainNode);
                 guitare.disconnect(gainNode2);
                 gainNode.disconnect(speaker);
                 gainNode2.disconnect(speaker);
-                break;
-              case 'delay':
+            } else if (off_effet == 'delay'){
                 guitare.disconnect(delay);
                 delay.disconnect(speaker);
-                break;
-              case 'reverb':
+            } else {
                 guitare.disconnect(convolver);
                 convolver.disconnect(speaker);
-                break;
             }
             boucle = 0;
-            console.log(effet+' deconnecté');
+            console.log(off_effet+' deconnecté');
             return;
           }
         });
