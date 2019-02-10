@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', ()=> {
         let gainNode = context.createGain(1);
         let gainNode2 = context.createGain(1); 
         let convolver = context.createConvolver();
-
+        let wetGain = context.createGain();
         // Retour Guitare
         guitare.connect(speaker);
           
@@ -109,9 +109,35 @@ document.addEventListener('DOMContentLoaded', ()=> {
         }
 
         /////////////////// Effet Bitcruch ////////////////////
+        
+        function createBitCrusher(){
+          let bufferSize = 4096;
+          function effect() {
+              let bitCrusher = context.createScriptProcessor(bufferSize, 1, 1);
+              bitCrusher.bits = 4; // between 1 and 16
+              bitCrusher.normfreq = 0.1; // between 0.0 and 1.0
+              
+              let step = Math.pow(1/2, bitCrusher.bits);
+              let phaser = 0;
+              let last = 0;
 
-
-
+              bitCrusher.onaudioprocess = function(e) {
+                  let input = e.inputBuffer.getChannelData(0);
+                  let output = e.outputBuffer.getChannelData(0);
+                  for (let i = 0; i < bufferSize; i++) {
+                      phaser += bitCrusher.normfreq;
+                      if (phaser >= 1.0) {
+                          phaser -= 1.0;
+                          last = step * Math.floor(input[i] / step + 0.5);
+                      }
+                      output[i] = last;
+                  }
+              };
+              guitare.connect(bitCrusher);
+              bitCrusher.connect(speaker);
+              //return bitCrusher;
+          } effect();
+        }
         //////////////////// Enclanchement des effets //////////////////////
 
         let boucle=0;
@@ -129,6 +155,9 @@ document.addEventListener('DOMContentLoaded', ()=> {
                 biquadFilter.connect(gainNode);
                 gainNode.connect(speaker);
                 //distortion.connect(speaker);                       
+                break;
+              case 'BitCrusher':
+                createBitCrusher();
                 break;
               case 'overdrive':
                 guitare.connect(gainNode);
@@ -155,6 +184,9 @@ document.addEventListener('DOMContentLoaded', ()=> {
                 distortion.disconnect(biquadFilter);
                 biquadFilter.disconnect(gainNode);
                 gainNode.disconnect(speaker);
+            } else if (off_effet == 'BitCrusher'){
+              guitare.disconnect(wetGain);
+              wetGain.disconnect(speaker);
             } else if (off_effet == 'overdrive'){
                 guitare.disconnect(gainNode);
                 guitare.disconnect(gainNode2);
