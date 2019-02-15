@@ -164,6 +164,18 @@ h1{
   border-radius: 15px;
   border-width: 4px;
 }
+.pedal3 {
+  position: absolute;
+  width: 200px;
+  text-align: center;
+  height: 400px;
+  left: calc(25% + 50px);
+  top: calc(50% - 250px);
+  /* border: rgba(255, 252, 0, 0.51); */
+  border: solid var(--blue_web);
+  border-radius: 15px;
+  border-width: 4px;
+}
 input[type=range]{
   width: 100px;
   margin-top:20px;

@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', ()=> {
   const red = document.querySelector('.button');
   let pedal2 = document.querySelector('.pedal2');
 
-  //////////////// Allumage du flux et de la pédal ////////////////////
+  /////////// Allumage du flux et de la pédal /////////////
   red.addEventListener('click',()=> {
     const context = new AudioContext();
       
@@ -31,10 +31,17 @@ document.addEventListener('DOMContentLoaded', ()=> {
         let gainNode2 = context.createGain(1); 
         let convolver = context.createConvolver();
         let wetGain = context.createGain();
+        let rev1 = document.querySelector('#rang1');
+        let rev2 = document.querySelector('#rang2');
+        let rev3 = document.querySelector('#rang3');
+        let bits = document.querySelector('#bits');
+        let normfreq = document.querySelector('#normfreq');
+        let revers;
+
         // Retour Guitare
         guitare.connect(speaker);
           
-        ////////////////// Fonction de distortion /////////////////
+        /////////////// Fonction de distortion ///////////////
 
         function disto(){
           function makeDistortionCurve(amount) {
@@ -75,10 +82,7 @@ document.addEventListener('DOMContentLoaded', ()=> {
           return impulse;
         } 
           //Controller de la reverb
-            let rev1 = document.querySelector('#rang1');
-            let rev2 = document.querySelector('#rang2');
-            let rev3 = document.querySelector('#rang3');
-            let revers;
+            
             pedal2.addEventListener('mousemove',(e)=>{
               if (e.buttons != 0) {  
                 let duree = rev1.value;
@@ -108,7 +112,7 @@ document.addEventListener('DOMContentLoaded', ()=> {
           });
         }
 
-        /////////////////// Effet Bitcruch ////////////////////
+        ////////////// Effet Bitcruch //////////////
         
         function createBitCrusher(){
           let bufferSize = 4096;
