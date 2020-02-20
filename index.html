@@ -8,17 +8,44 @@
   <link rel="stylesheet" href="css\style.css">
   <script src="js\script.js"></script>
   <script src="js\effect.js"></script>
-  <title>Pedale type</title>
+  <title>Brikeffect</title>
 </head>
 <body>
-  <h1>Pédale type</h1>
+    <h1>Brikeffect</h1>
+    <label class='container mute'>
+        <input type='checkbox' class="mute" id='mute'>mute</input>
+        <span class="checkmark"></span>
+      </label>
   <select name="effet" id="effets">
     <option value="distortion">distortion</option>
+    <option value="BitCrusher">BitCrusher</option>
     <option value="overdrive">overdrive</option>
     <option value="delay">delay</option>
-    <option value="reverb">reverbe</option>
-
+    <option value="reverb">reverb</option>
   </select>
+
+  <div class="pedal2">
+    <h3>Réglages Reverb</h3>
+    <p>time</p>
+    <input type="range" min="0.1" max="8" step="0.1" id="rang1" value="1">
+    <p>decalé</p>
+    <input type="range" min="0.1" max="8" step="0.1" id="rang2" value="1">
+    <p>renversé</p>
+    <label class='container'>
+      <input type="checkbox" id="rang3">
+      <span class="checkmark"></span>
+    </label>
+  </div>
+
+  <div class="pedal3">
+    <h3>Réglages BitCrusher</h3>
+    <p>bits</p>
+    <input type="range" min="1" max="16" step="0.1" id="bits" value="1">
+    <p>normfreq</p>
+    <input type="range" min="0.1" max="1" step="0.1" id="normfreq" value="1">
+    
+  </div>
+
   <div class="pedal">
       <input type="button" class='button'value="">
       <div class="ampoule active"></div>
@@ -32,9 +59,13 @@
     <div class="bouton" id="rond"></div>
   </div>
 
+<<<<<<< HEAD
         <div class='lab'>
           <input type='checkbox' class="mute" id='mute'>mute</input>
         </div>
+=======
+  
+>>>>>>> 3cb3448e3c793776575f01ceced2758ffaa04598
   <!-- <section class="pedal">
     <div class="ampoule active"></div>
   </section> -->
