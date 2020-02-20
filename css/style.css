@@ -267,8 +267,6 @@ input{
   border-style: none;
   top:10px;
   left:10px;
-<<<<<<< HEAD
-=======
 }
 
 select{
@@ -280,5 +278,4 @@ select{
 }
 .lab{
   margin: 10px;
->>>>>>> 3cb3448e3c793776575f01ceced2758ffaa04598
 }
